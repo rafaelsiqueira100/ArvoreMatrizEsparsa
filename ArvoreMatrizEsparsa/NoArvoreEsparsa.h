@@ -21,11 +21,14 @@ public:
 	char isVazio() const throw();
 	char isFolha() const throw();
 	char haInfo(InfoArvoreEsparsa*) const throw();
+	char haChave(InfoArvoreEsparsa*)const throw();
 	char getEquilibrio() const throw();
 	char getNiveis() const throw();
 	void balancear() throw();
 	void rotacaoEsquerda() throw();
 	void rotacaoDireita() throw();
+	void setChave(InfoArvoreEsparsa*) throw();
+	InfoArvoreEsparsa* getChave() throw();
 private:
 	InfoArvoreEsparsa * info;
 	NoArvoreEsparsa* esq;
@@ -35,7 +38,7 @@ private:
 	char calcularEquilibrio() throw();
 	InfoArvoreEsparsa* menorDosMaiores() throw(char*);
 	InfoArvoreEsparsa* maiorDosMenores() throw(char*);
-
+	InfoArvoreEsparsa* chave;//chave seria o número de linha/coluna
 	void rotacaoDuplaEsquerda() throw();
 	void rotacaoDuplaDireita() throw();
 

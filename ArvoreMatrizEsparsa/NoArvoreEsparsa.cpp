@@ -209,6 +209,34 @@ loop:while (1) {
 
 }
 }
+
+char NoArvoreEsparsa::haChave(InfoArvoreEsparsa* chave) const throw() {
+	NoArvoreEsparsa* noRel = (NoArvoreEsparsa*)(this);
+
+loop:while (1) {
+	if (noRel == nullptr)
+		return 0;
+	if ((noRel->chave) != nullptr) {
+		if (*(noRel->chave) == *chave) {
+			return true;
+		}
+		if (*(noRel->chave) > *chave) {
+			//ir pro ponteiro de nó i-1
+			noRel = (noRel->esq);
+			goto loop;
+		}
+		if (*(noRel->chave) < *chave) {
+			noRel = (noRel->dir);
+			goto loop;
+		}
+
+	}
+	else {
+		return 0;
+	}
+
+}
+}
 /*	InfoArvoreEsparsa * info;
 NoArvoreEsparsa* esq;
 NoArvoreEsparsa* dir;*/
@@ -436,4 +464,10 @@ void NoArvoreEsparsa::rotacaoDuplaEsquerda() throw() {
 void NoArvoreEsparsa::rotacaoDuplaDireita() throw() {
 	this->esq->rotacaoEsquerda();
 	this->rotacaoDireita();
+}
+void NoArvoreEsparsa::setChave(InfoArvoreEsparsa* novaChave) throw() {
+	this->chave = novaChave;//...
+}
+InfoArvoreEsparsa* NoArvoreEsparsa::getChave() throw() {
+	return this->chave;
 }
