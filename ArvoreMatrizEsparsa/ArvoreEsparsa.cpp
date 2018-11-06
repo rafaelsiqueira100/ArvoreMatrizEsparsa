@@ -1,78 +1,113 @@
-#include "stdafx.h"
 #include "ArvoreEsparsa.h"
 
 
 ArvoreEsparsa::ArvoreEsparsa()
 {
+	this->raiz = nullptr;
 }
 
-
-ArvoreEsparsa::ArvoreEsparsa(InfoArvoreEsparsa* valorPadrao)
-{
-	this->valorPadrao = valorPadrao;
-}
 
 ArvoreEsparsa::~ArvoreEsparsa()
 {
 	if (this->raiz != nullptr)
 		delete raiz;
 }
-ostream& operator<< (ostream& os, const InfoArvoreEsparsa& arvore) throw() {
-	return arvore.print(os);
+
+void ArvoreEsparsa::remover(InfoArvoreEsparsa* info) throw(char*) {
+	if (this->raiz == nullptr) {
+		//árvore está vazia
+		throw("Tentativa de remoção em árvore vazia!");
+	}
+	this->raiz->removerVetorOrdem(info, nullptr);
+	if ((this->raiz->isVazio()))
+		this->raiz = nullptr;
+
+	this->balancear();
 }
-char ArvoreEsparsa::operator<(const InfoArvoreEsparsa& outra)const throw() {
-	return this->raiz->getPtrInfo(0) < ((const ArvoreEsparsa&)outra).raiz->getPtrInfo(0);
+char ArvoreEsparsa::isVazia() const throw() {
+	if (this->raiz == nullptr)
+		return 1;
+	if (this->raiz->isVazio())
+		return 1;
+	return 0;
 }
-char ArvoreEsparsa::operator>(const InfoArvoreEsparsa& outra)const throw() {
-	return this->raiz->getPtrInfo(0) > ((const ArvoreEsparsa&)outra).raiz->getPtrInfo(0);
+char ArvoreEsparsa::operator<(const InfoArvoreEsparsa& outraInfo) const throw()
+{
+	return this->getRaiz() < ((ArvoreEsparsa&)outraInfo).getRaiz();
 }
-char ArvoreEsparsa::operator==(const InfoArvoreEsparsa& outra)const throw() {
-	return this->raiz->getPtrInfo(0) == ((const ArvoreEsparsa&)outra).raiz->getPtrInfo(0);
+char ArvoreEsparsa::operator>(const InfoArvoreEsparsa& outraInfo) const throw()
+{
+	return this->getRaiz() > ((ArvoreEsparsa&)outraInfo).getRaiz();
 }
-char ArvoreEsparsa::operator<=(const InfoArvoreEsparsa& outra)const throw() {
-	return this->raiz->getPtrInfo(0) <= ((const ArvoreEsparsa&)outra).raiz->getPtrInfo(0);
+char ArvoreEsparsa::operator==(const InfoArvoreEsparsa& outraInfo) const throw()
+{
+	return this->getRaiz() == ((ArvoreEsparsa&)outraInfo).getRaiz();
 }
-char ArvoreEsparsa::operator>=(const InfoArvoreEsparsa& outra)const throw() {
-	return this->raiz->getPtrInfo(0) >= ((const ArvoreEsparsa&)outra).raiz->getPtrInfo(0);
+char ArvoreEsparsa::operator<=(const InfoArvoreEsparsa& outraInfo) const throw()
+{
+	return this->getRaiz() <= ((ArvoreEsparsa&)outraInfo).getRaiz();
 }
-InfoArvoreEsparsa& ArvoreEsparsa::operator=(const InfoArvoreEsparsa& outra)throw() {
-	this->raiz = new NoArvoreEsparsa(*(((const ArvoreEsparsa&)outra).raiz));
+char ArvoreEsparsa::operator>=(const InfoArvoreEsparsa& outraInfo) const throw()
+{
+	return this->getRaiz() >= ((ArvoreEsparsa&)outraInfo).getRaiz();
+}
+InfoArvoreEsparsa& ArvoreEsparsa::operator=(const InfoArvoreEsparsa & outraInfo) throw()
+{
+	*raiz = *(((const ArvoreEsparsa&)outraInfo).getRaiz());
 	return *this;
 }
-ostream& ArvoreEsparsa::print(ostream& os) const throw() {
-	if(this->raiz == nullptr)
+ostream& ArvoreEsparsa::print(ostream& os) const throw()
+{
+	if (this->raiz == nullptr)
 		return os << "{  }" << '\n';
 	return	os << '{' << *(this->raiz) << '}' << '\n';
 }
-char ArvoreEsparsa::haChave(InfoArvoreEsparsa* novoInfo)const throw() {
-	return this->raiz->haChave(novoInfo);
+char ArvoreEsparsa::haInfo(InfoArvoreEsparsa* info) const throw() {
+	if (this->raiz == nullptr)
+		return 0;
+	return this->raiz->haInfo(info);
 }
-InfoArvoreEsparsa* ArvoreEsparsa::pegar(int chave) {
-	if (!haChave(chave))
-		return nullptr;
-	else {
-		NoArvoreEnaria* noRel = this->raiz;
-		while (1) {
-			if (noRel == nullptr)
-				return 0;
-			if ((noRel->chave) != nullptr) {
-				if (*(noRel->chave) == *chave) {
-					return true;
-				}
-				if (*(noRel->chave) > *chave) {
-					//ir pro ponteiro de nó i-1
-					noRel = (noRel->esq);
-					goto loop;
-				}
-				if (*(noRel->chave) < *chave) {
-					noRel = (noRel->dir);
-					goto loop;
-				}
 
-			}
-			else {
-				return 0;
-			}
+NoArvoreEsparsa* ArvoreEsparsa::getRaiz() const throw()
+{
+	return this->raiz;
+}
+
+ostream& operator<< (ostream& os, const ArvoreEsparsa& arvore) throw() {
+	return arvore.print(os);
+}
+
+
+void ArvoreEsparsa::balancear() throw() {
+	if (this->raiz == nullptr)
+		return;
+	this->raiz->balancear();
+}
+InfoArvoreEsparsa* ArvoreEsparsa::pegar(const InfoArvoreEsparsa& infoDesejada) const throw(){
+	NoArvoreEsparsa* noAtual = this->raiz;
+	while (noAtual != nullptr) {
+		if ( infoDesejada == *(noAtual->getPtrInfo()) ) {
+			return noAtual->getPtrInfo();
+		}
+		if (infoDesejada < *(noAtual->getPtrInfo())) {
+			noAtual = noAtual->getPtrNoFilho(0);
+		}
+		if (infoDesejada > *(noAtual->getPtrInfo())) {
+			noAtual = noAtual->getPtrNoFilho(1);
+		}
 	}
+	return nullptr;
+}
 
+void ArvoreEsparsa::inserir(InfoArvoreEsparsa* info)
+{
+	if (this->raiz == nullptr)
+		raiz = new NoArvoreEsparsa();
+	if ((this->raiz->isVazio())) {
+		this->raiz == nullptr;
+		raiz = new NoArvoreEsparsa();
+	}
+	this->raiz->inserirVetorOrdem(info);
+
+	this->balancear();
 }

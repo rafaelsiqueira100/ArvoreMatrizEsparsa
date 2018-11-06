@@ -1,5 +1,4 @@
 #include "NoArvoreEsparsa.h"
-#include <math.h>
 
 
 NoArvoreEsparsa::NoArvoreEsparsa()
@@ -77,7 +76,7 @@ void NoArvoreEsparsa::setPtrNoFilho(NoArvoreEsparsa* novoNo, unsigned char indFi
 		break;
 	}
 }
-InfoArvoreEsparsa*  NoArvoreEsparsa::getPtrInfo(unsigned int indInfo) const throw() {
+InfoArvoreEsparsa*  NoArvoreEsparsa::getPtrInfo() const throw() {
 	return this->info;
 }
 char NoArvoreEsparsa::inserirVetorOrdem(InfoArvoreEsparsa* info)throw() {
@@ -209,37 +208,9 @@ loop:while (1) {
 
 }
 }
-
-char NoArvoreEsparsa::haChave(InfoArvoreEsparsa* chave) const throw() {
-	NoArvoreEsparsa* noRel = (NoArvoreEsparsa*)(this);
-
-loop:while (1) {
-	if (noRel == nullptr)
-		return 0;
-	if ((noRel->chave) != nullptr) {
-		if (*(noRel->chave) == *chave) {
-			return true;
-		}
-		if (*(noRel->chave) > *chave) {
-			//ir pro ponteiro de nó i-1
-			noRel = (noRel->esq);
-			goto loop;
-		}
-		if (*(noRel->chave) < *chave) {
-			noRel = (noRel->dir);
-			goto loop;
-		}
-
-	}
-	else {
-		return 0;
-	}
-
-}
-}
 /*	InfoArvoreEsparsa * info;
-NoArvoreEsparsa* esq;
-NoArvoreEsparsa* dir;*/
+	NoArvoreEsparsa* esq;
+	NoArvoreEsparsa* dir;*/
 InfoArvoreEsparsa* NoArvoreEsparsa::acharInfoPorLugar() throw(char*) {
 
 	InfoArvoreEsparsa* infoTrocarFilho = nullptr;
@@ -308,17 +279,13 @@ InfoArvoreEsparsa* NoArvoreEsparsa::maiorDosMenores() throw(char*) {
 ostream& operator<< (ostream& os, const NoArvoreEsparsa& no) throw() {
 	int indicePtr = 0;
 	int indiceInfo = 0;
-
-
-	if (no.getPtrInfo(0) != nullptr) {
-		InfoArvoreEsparsa* info = (no.getPtrInfo(0));
+	if (no.getPtrInfo() != nullptr) {
+		InfoArvoreEsparsa* info = (no.getPtrInfo());
 		os << "  " << (*(info)) << "  ";
 	}
 	else {
 		os << "  **  ";
 	}
-
-
 	os << '[';
 	if (no.getPtrNoFilho(0) != nullptr) {
 		os << '(' << *(no.getPtrNoFilho(0)) << ')';
@@ -335,32 +302,6 @@ ostream& operator<< (ostream& os, const NoArvoreEsparsa& no) throw() {
 		os << "";
 	}
 	os << ']';
-	/*
-	if (no.getPtrInfo(0) != nullptr) {
-	InfoArvoreEsparsa* info = (no.getPtrInfo(0));
-	os << "  " << (*(info)) << "  ";
-	}
-	else {
-	os << "  **  ";
-	}
-	os << '\n';
-	os << "|       \ \n";
-	os << "V        _/";
-	os << '\n';
-	if (no.getPtrNoFilho(0) != nullptr) {
-
-	os << '(' << *(no.getPtrNoFilho(0)) << ')';
-	}
-	else {
-	os << "(  ||  )";
-	}
-	os << "        ";
-	if (no.getPtrNoFilho(1) != nullptr) {
-	os << '(' << *(no.getPtrNoFilho(1)) << ')';
-	}
-	else {
-	os << "(  ||  )";
-	}*/
 	return os;
 }
 char NoArvoreEsparsa::calcularEquilibrio() throw() {
@@ -456,6 +397,14 @@ void NoArvoreEsparsa::rotacaoDireita() throw() {
 
 	this->calcularEquilibrio();
 }
+void NoArvoreEsparsa::setInfo(const InfoArvoreEsparsa& novaInfo) throw()
+{
+	*this->info = novaInfo;
+}
+InfoArvoreEsparsa* NoArvoreEsparsa::getInfo() throw()
+{
+	return this->info;
+}
 void NoArvoreEsparsa::rotacaoDuplaEsquerda() throw() {
 	this->dir->rotacaoDireita();
 	this->rotacaoEsquerda();
@@ -464,10 +413,4 @@ void NoArvoreEsparsa::rotacaoDuplaEsquerda() throw() {
 void NoArvoreEsparsa::rotacaoDuplaDireita() throw() {
 	this->esq->rotacaoEsquerda();
 	this->rotacaoDireita();
-}
-void NoArvoreEsparsa::setChave(InfoArvoreEsparsa* novaChave) throw() {
-	this->chave = novaChave;//...
-}
-InfoArvoreEsparsa* NoArvoreEsparsa::getChave() throw() {
-	return this->chave;
 }

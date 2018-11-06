@@ -7,15 +7,14 @@ using namespace std;
 #define ARVOREESPARSA_H_INCLUDED
 
 
-class ArvoreEsparsa : InfoArvoreEsparsa
+class ArvoreEsparsa : public InfoArvoreEsparsa
 {
 public:
 	ArvoreEsparsa();
-	ArvoreEsparsa(InfoArvoreEsparsa*);
 	~ArvoreEsparsa();
-	InfoArvoreEsparsa* pegar(int );
-	void inserir(int , int, InfoArvoreEsparsa* );
-	char haChave(InfoArvoreEsparsa*)const throw();
+	InfoArvoreEsparsa* pegar(const InfoArvoreEsparsa&) const throw();
+	void inserir(InfoArvoreEsparsa* );
+	void remover(InfoArvoreEsparsa*) throw(char*);
 	friend ostream& operator<< (ostream&, const InfoArvoreEsparsa&) throw();
 	char operator<(const InfoArvoreEsparsa&)const throw();
 	char operator>(const InfoArvoreEsparsa&)const throw();
@@ -24,10 +23,12 @@ public:
 	char operator>=(const InfoArvoreEsparsa&)const throw();
 	InfoArvoreEsparsa& operator=(const InfoArvoreEsparsa&)throw();
 	ostream& print(ostream&) const throw();
-
+	char haInfo(InfoArvoreEsparsa*) const throw();
+	NoArvoreEsparsa* getRaiz() const throw();
+	char isVazia() const throw();
+	
 private:
-	NoArvoreEsparsa * raiz;
-	InfoArvoreEsparsa* valorPadrao;
+	NoArvoreEsparsa* raiz;
 	void balancear() throw();
 };
 

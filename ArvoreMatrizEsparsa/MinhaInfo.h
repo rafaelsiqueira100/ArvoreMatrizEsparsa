@@ -12,8 +12,10 @@ public:
 	MinhaInfo(int);
 	MinhaInfo(const InfoArvoreEsparsa&) throw();
 	friend ostream& operator<< (ostream&, const MinhaInfo&) throw();
-	int getValor() const throw();
-	void setValor(int) throw();
+	int getChave() const throw();
+	void setChave(int) throw();
+	InfoArvoreEsparsa* getInfo() const throw();
+	void setInfo(const InfoArvoreEsparsa&) const throw();
 	char operator<(const InfoArvoreEsparsa&)const throw();
 	char operator>(const InfoArvoreEsparsa&)const throw();
 	char operator==(const InfoArvoreEsparsa&)const throw();
@@ -23,7 +25,8 @@ public:
 	ostream& print(ostream&) const throw();
 
 private:
-	int valor;
+	int chave;
+	InfoArvoreEsparsa* info;
 
 };
 #endif

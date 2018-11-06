@@ -14,21 +14,20 @@ public:
 	friend ostream& operator<< (ostream&, const NoArvoreEsparsa&) throw();
 	NoArvoreEsparsa* getPtrNoFilho(unsigned char) const throw(char*);
 	void setPtrNoFilho(NoArvoreEsparsa*, unsigned char) throw(char*);
-	InfoArvoreEsparsa* getPtrInfo(unsigned int) const throw();
-	char inserirVetorOrdem(NoArvoreEsparsa*)throw();
+	InfoArvoreEsparsa* getPtrInfo() const throw();
+	char inserirVetorOrdem(InfoArvoreEsparsa*)throw();
 	char removerVetorOrdem(InfoArvoreEsparsa*, NoArvoreEsparsa*)throw();
 	char isCheio() const throw();
 	char isVazio() const throw();
 	char isFolha() const throw();
 	char haInfo(InfoArvoreEsparsa*) const throw();
-	char haChave(InfoArvoreEsparsa*)const throw();
 	char getEquilibrio() const throw();
 	char getNiveis() const throw();
 	void balancear() throw();
 	void rotacaoEsquerda() throw();
 	void rotacaoDireita() throw();
-	void setChave(InfoArvoreEsparsa*) throw();
-	InfoArvoreEsparsa* getChave() throw();
+	void setInfo(const InfoArvoreEsparsa&) throw();
+	InfoArvoreEsparsa* getInfo() throw();
 private:
 	InfoArvoreEsparsa * info;
 	NoArvoreEsparsa* esq;
@@ -38,7 +37,6 @@ private:
 	char calcularEquilibrio() throw();
 	InfoArvoreEsparsa* menorDosMaiores() throw(char*);
 	InfoArvoreEsparsa* maiorDosMenores() throw(char*);
-	InfoArvoreEsparsa* chave;//chave seria o número de linha/coluna
 	void rotacaoDuplaEsquerda() throw();
 	void rotacaoDuplaDireita() throw();
 
