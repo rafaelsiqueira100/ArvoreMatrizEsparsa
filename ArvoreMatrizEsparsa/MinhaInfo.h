@@ -10,7 +10,9 @@ class MinhaInfo : public InfoArvoreEsparsa
 public:
 	MinhaInfo();
 	MinhaInfo(int);
+	MinhaInfo(int, InfoArvoreEsparsa*) throw();
 	MinhaInfo(const InfoArvoreEsparsa&) throw();
+	~MinhaInfo();
 	friend ostream& operator<< (ostream&, const MinhaInfo&) throw();
 	int getChave() const throw();
 	void setChave(int) throw();

@@ -5,18 +5,27 @@ MinhaInfo::MinhaInfo() : chave(0) {}
 MinhaInfo::MinhaInfo(int vlr) {
 	this->chave = vlr;
 }
+MinhaInfo::MinhaInfo(int chave, InfoArvoreEsparsa* info) throw()
+{
+	this->chave = chave;
+	this->info = info;
+}
 MinhaInfo::MinhaInfo(const InfoArvoreEsparsa& outra) :
 	MinhaInfo(((const MinhaInfo&)outra).chave)
 {}
+MinhaInfo::~MinhaInfo() {
+	if (this->info != nullptr)
+		delete this->info;
+}
 ostream& operator<< (ostream& os, const MinhaInfo& info) throw() {
 	return info.print(os);
 }
 ostream& MinhaInfo::print(ostream& os)const throw() {
 	
 	if (this->info != nullptr)
-		return os  << "{ chave = [ " << this->chave<< " ] "<<'\n'<<" info = [ " << this->info<<" ] } ";
+		return os << "{ chave = [ " << this->chave << " ] " << '\n' << " info = [ " << this->info << " ] } ";
 	else
-		return os << " chave = { " << this->chave << " } "<<'\n'<<" info = null";
+		return os << " chave = { " << this->chave << " } " << '\n';
 }
 int MinhaInfo::getChave()const throw() {
 	return this->chave;

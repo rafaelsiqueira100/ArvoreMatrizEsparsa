@@ -37,7 +37,7 @@ InfoArvoreEsparsa* MatrizEsparsa::pegar(int linha, int coluna) {
 		return valorPadrao;
 	}
 }
-void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) {
+void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) throw(char*){
 	if (vazia) {
 		this->menorLinha = linha;
 		this->maiorLinha = linha;
@@ -55,36 +55,44 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) {
 			this->maiorColuna = coluna;
 	}
 	vazia = 0;
-	MinhaInfo li (linha);//chave=linha
-	MinhaInfo col(coluna);//chave=coluna
-	
-		if (this->arvoreLinhas.haInfo(&li)) {
+
+	MinhaInfo* li = new MinhaInfo(linha);//chave=linha
+		if (this->arvoreLinhas.haInfo(li)) {
 			//alterar
-			MinhaInfo* infoLinha = (MinhaInfo*)(this->arvoreLinhas.pegar(li));
+			
+			MinhaInfo* infoLinha = (MinhaInfo*)(this->arvoreLinhas.pegar(*li));
 			ArvoreEsparsa* arvoreColunas = (ArvoreEsparsa*)((*infoLinha).getInfo());
-				if ((*arvoreColunas).haInfo(&col)) {
-					//alterar
-					if (*valor == *valorPadrao) {
-					//remover
-						(*arvoreColunas).remover(&col);
-					}
-					else {
-						//altera o valor
-						MinhaInfo* infoColuna = (MinhaInfo*)((*arvoreColunas).pegar(col));
-						(*infoColuna).setInfo(*valor);
-					}
+			if (arvoreColunas == nullptr) {
+				//throw("árvore de colunas nula!");
+				return;
+			}
+			MinhaInfo* col = new MinhaInfo(coluna);//chave=coluna
+			if ((*arvoreColunas).haInfo(col)) {
+				//alterar
+				if (*valor == *valorPadrao) {
+				//remover
+					(*arvoreColunas).remover(col);
+				/*	if (this->arvoreLinhas.isVazia())
+						this->vazia = 1;*/
 				}
-				else {//não existe essa coluna na árvore
-					//inserir outro nó
-					if (*valor == *valorPadrao) {
-					//não faz nada
-					}
-					else {
-						//insere essa coluna e valor na árvore
-						col.setInfo(*valor);//linha-coluna tem um valor
-						(*arvoreColunas).inserir(&col);
-					}
+				else {
+					//altera o valor
+					MinhaInfo* infoColuna = (MinhaInfo*)((*arvoreColunas).pegar(*col));
+					(*infoColuna).setInfo(*valor);
 				}
+			}
+			else {//não existe essa coluna na árvore
+				//inserir outro nó
+				if (*valor == *valorPadrao) {
+				//não faz nada
+				}
+				else {
+					//insere essa coluna e valor na árvore
+					MinhaInfo* col = new MinhaInfo(coluna, valor);
+					//linha-coluna tem um valor
+					(*arvoreColunas).inserir(col);
+				}
+			}
 		}
 		else {//não existe essa linha na árvore
 		//inserir outro nó
@@ -93,11 +101,12 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) {
 			}
 			else{
 				//insere essa linha, coluna e valor na árvore
-				col.setInfo(*valor);//linha-coluna tem uma info
+				MinhaInfo* col = new MinhaInfo(coluna, valor);//linha-coluna tem um valor
 				ArvoreEsparsa* arvoreColunas = new ArvoreEsparsa();
-				(*arvoreColunas).inserir(&col);
-				li.setInfo(*arvoreColunas);//linha tem uma info
-				this->arvoreLinhas.inserir(&li);
+				(*arvoreColunas).inserir(col);
+				MinhaInfo* novaLi = new MinhaInfo(linha, arvoreColunas);
+				//linha tem uma info
+				this->arvoreLinhas.inserir(novaLi);
 
 			
 			}
@@ -108,16 +117,15 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) {
 
 ostream& operator<<(ostream& os, const MatrizEsparsa& matriz) throw()
 {
-	//mudar isso
 	os << "{ " << '\n' <<
 		"Valor padrao = [ ";
 		
 	if (matriz.valorPadrao == nullptr)
 		os << "null";
 	else
-		os << ((MinhaInfo)(*matriz.valorPadrao)).getChave();
+		os << (*((MinhaInfo*)(matriz.valorPadrao))).getChave();
 	os << ']' << '\n';
-	os << "Matriz = " << '\n';
+	os <<'\n' <<"Matriz = " << '\n';
 	int indiceLinhas, indiceColunas;
 	char haLinha, haColuna;
 
@@ -127,21 +135,21 @@ ostream& operator<<(ostream& os, const MatrizEsparsa& matriz) throw()
 		
 		//(ArvoreEsparsa) ((MinhaInfo)(matriz.arvoreLinhas.pegar(*(new MinhaInfo(indiceLinhas))))).getInfo();
 		
-		infoLinha = (MinhaInfo*)((ArvoreEsparsa)(matriz.arvoreLinhas)).pegar((const InfoArvoreEsparsa&)*infoLinha);
-		ArvoreEsparsa arvoreColunas = *(ArvoreEsparsa*)(infoLinha->getInfo());
+		infoLinha = (MinhaInfo*)((*(ArvoreEsparsa*)(&matriz.arvoreLinhas))).pegar((const InfoArvoreEsparsa&)*infoLinha);
+		ArvoreEsparsa* arvoreColunas = (ArvoreEsparsa*)(infoLinha->getInfo());
 		for (indiceColunas = matriz.menorColuna; indiceColunas <= matriz.maiorColuna; indiceColunas++) {
 			MinhaInfo* infoColuna = new MinhaInfo(indiceColunas);
 			if (!haLinha) {
-				os << " [ " << matriz.valorPadrao << " ] ";
+				os << " [ " << (*((MinhaInfo*)(matriz.valorPadrao))).getChave() << " ] ";
 			}
 			else {
-				haColuna = arvoreColunas.haInfo(infoColuna);
+				haColuna = (*arvoreColunas).haInfo(infoColuna);
 				if (!haColuna) {
-					os << " [ " << matriz.valorPadrao << " ] ";
+					os << " [ " << (*((MinhaInfo*)(matriz.valorPadrao))).getChave() << " ] ";
 				}
 				else {
-					infoColuna = (MinhaInfo*)(arvoreColunas.pegar((const InfoArvoreEsparsa&)*infoColuna));
-					os << " [ " << infoColuna->getInfo() << " ] ";
+					infoColuna = (MinhaInfo*)((*arvoreColunas).pegar((const InfoArvoreEsparsa&)*infoColuna));
+					os << " [ " << (*(MinhaInfo*)(infoColuna->getInfo())).getChave() << " ] ";
 				}
 			}
 		}
