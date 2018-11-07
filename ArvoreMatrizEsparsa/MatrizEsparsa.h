@@ -19,5 +19,6 @@ private:
 	ArvoreEsparsa arvoreLinhas;
 	InfoArvoreEsparsa*valorPadrao;
 	int maiorLinha, maiorColuna, menorLinha, menorColuna;
+	int numElementos;
 };
 #endif

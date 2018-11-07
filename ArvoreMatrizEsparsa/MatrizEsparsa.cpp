@@ -9,7 +9,8 @@ MatrizEsparsa::MatrizEsparsa(InfoArvoreEsparsa* valorPadrao) :
 	menorColuna(0),
 	maiorLinha(-1),
 	maiorColuna(-1),
-	vazia(1)
+	vazia(1),
+	numElementos(0)
 {}
 
 
@@ -72,8 +73,10 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 				if (*valor == *valorPadrao) {
 				//remover
 					(*arvoreColunas).remover(col);
-				/*	if (this->arvoreLinhas.isVazia())
-						this->vazia = 1;*/
+					this->numElementos--;
+					
+					if (this->numElementos == 0)
+						this->vazia = 1;
 				}
 				else {
 					//altera o valor
@@ -88,9 +91,11 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 				}
 				else {
 					//insere essa coluna e valor na árvore
+					
 					MinhaInfo* col = new MinhaInfo(coluna, valor);
 					//linha-coluna tem um valor
 					(*arvoreColunas).inserir(col);
+					this->numElementos++;
 				}
 			}
 		}
@@ -101,13 +106,14 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 			}
 			else{
 				//insere essa linha, coluna e valor na árvore
+		
 				MinhaInfo* col = new MinhaInfo(coluna, valor);//linha-coluna tem um valor
 				ArvoreEsparsa* arvoreColunas = new ArvoreEsparsa();
 				(*arvoreColunas).inserir(col);
 				MinhaInfo* novaLi = new MinhaInfo(linha, arvoreColunas);
 				//linha tem uma info
 				this->arvoreLinhas.inserir(novaLi);
-
+				this->numElementos++;
 			
 			}
 		}
@@ -128,35 +134,36 @@ ostream& operator<<(ostream& os, const MatrizEsparsa& matriz) throw()
 	os <<'\n' <<"Matriz = " << '\n';
 	int indiceLinhas, indiceColunas;
 	char haLinha, haColuna;
+	if (matriz.vazia)
+		os << "nada" << '\n';
+	else {
+		for (indiceLinhas = matriz.menorLinha; indiceLinhas <= matriz.maiorLinha; indiceLinhas++) {
+			MinhaInfo* infoLinha = new MinhaInfo(indiceLinhas);
+			haLinha = (((matriz).arvoreLinhas)).haInfo(infoLinha);
 
-	for (indiceLinhas = matriz.menorLinha; indiceLinhas <= matriz.maiorLinha; indiceLinhas++) {
-		MinhaInfo* infoLinha = new MinhaInfo(indiceLinhas);
-		haLinha = (((matriz).arvoreLinhas)).haInfo(infoLinha);
-		
-		//(ArvoreEsparsa) ((MinhaInfo)(matriz.arvoreLinhas.pegar(*(new MinhaInfo(indiceLinhas))))).getInfo();
-		
-		infoLinha = (MinhaInfo*)((*(ArvoreEsparsa*)(&matriz.arvoreLinhas))).pegar((const InfoArvoreEsparsa&)*infoLinha);
-		ArvoreEsparsa* arvoreColunas = (ArvoreEsparsa*)(infoLinha->getInfo());
-		for (indiceColunas = matriz.menorColuna; indiceColunas <= matriz.maiorColuna; indiceColunas++) {
-			MinhaInfo* infoColuna = new MinhaInfo(indiceColunas);
-			if (!haLinha) {
-				os << " [ " << (*((MinhaInfo*)(matriz.valorPadrao))).getChave() << " ] ";
-			}
-			else {
-				haColuna = (*arvoreColunas).haInfo(infoColuna);
-				if (!haColuna) {
+			//(ArvoreEsparsa) ((MinhaInfo)(matriz.arvoreLinhas.pegar(*(new MinhaInfo(indiceLinhas))))).getInfo();
+
+			infoLinha = (MinhaInfo*)((*(ArvoreEsparsa*)(&matriz.arvoreLinhas))).pegar((const InfoArvoreEsparsa&)*infoLinha);
+			ArvoreEsparsa* arvoreColunas = (ArvoreEsparsa*)(infoLinha->getInfo());
+			for (indiceColunas = matriz.menorColuna; indiceColunas <= matriz.maiorColuna; indiceColunas++) {
+				MinhaInfo* infoColuna = new MinhaInfo(indiceColunas);
+				if (!haLinha) {
 					os << " [ " << (*((MinhaInfo*)(matriz.valorPadrao))).getChave() << " ] ";
 				}
 				else {
-					infoColuna = (MinhaInfo*)((*arvoreColunas).pegar((const InfoArvoreEsparsa&)*infoColuna));
-					os << " [ " << (*(MinhaInfo*)(infoColuna->getInfo())).getChave() << " ] ";
+					haColuna = (*arvoreColunas).haInfo(infoColuna);
+					if (!haColuna) {
+						os << " [ " << (*((MinhaInfo*)(matriz.valorPadrao))).getChave() << " ] ";
+					}
+					else {
+						infoColuna = (MinhaInfo*)((*arvoreColunas).pegar((const InfoArvoreEsparsa&)*infoColuna));
+						os << " [ " << (*(MinhaInfo*)(infoColuna->getInfo())).getChave() << " ] ";
+					}
 				}
 			}
+			os << '\n';
 		}
-		os << '\n';
 	}
-	if ((matriz).maiorLinha < (matriz).menorLinha)
-		os << "nada"<<'\n';
 	os << "} " << '\n';
 	return os;
 }
