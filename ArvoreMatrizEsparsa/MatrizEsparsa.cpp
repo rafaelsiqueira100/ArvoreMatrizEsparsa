@@ -254,11 +254,12 @@ ostream& operator<<(ostream& os, const MatrizEsparsa& matriz) throw()
 		for (indiceLinhas = matriz.menorLinha; indiceLinhas <= matriz.maiorLinha; indiceLinhas++) {
 			MinhaInfo* infoLinha = new MinhaInfo(indiceLinhas);
 			haLinha = (((matriz).arvoreLinhas)).haInfo(infoLinha);
-
+			ArvoreEsparsa* arvoreColunas = nullptr;
 			//(ArvoreEsparsa) ((MinhaInfo)(matriz.arvoreLinhas.pegar(*(new MinhaInfo(indiceLinhas))))).getInfo();
-
-			infoLinha = (MinhaInfo*)((*(ArvoreEsparsa*)(&matriz.arvoreLinhas))).pegar((const InfoArvoreEsparsa&)*infoLinha);
-			ArvoreEsparsa* arvoreColunas = (ArvoreEsparsa*)(infoLinha->getInfo());
+			if (haLinha) {
+				infoLinha = (MinhaInfo*)((*(ArvoreEsparsa*)(&matriz.arvoreLinhas))).pegar((const InfoArvoreEsparsa&)*infoLinha);
+				arvoreColunas = (ArvoreEsparsa*)(infoLinha->getInfo());
+			}
 			for (indiceColunas = matriz.menorColuna; indiceColunas <= matriz.maiorColuna; indiceColunas++) {
 				MinhaInfo* infoColuna = new MinhaInfo(indiceColunas);
 				if (!haLinha) {
