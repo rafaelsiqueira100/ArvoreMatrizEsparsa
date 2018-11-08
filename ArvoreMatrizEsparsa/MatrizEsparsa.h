@@ -11,7 +11,7 @@ public:
 	~MatrizEsparsa();
 	
 	InfoArvoreEsparsa* pegar(int, int);
-	void inserir(int linha, int, InfoArvoreEsparsa*) throw(char*);
+	void inserir(int, int, InfoArvoreEsparsa*) throw(char*);
 	friend ostream& operator<< (ostream&, const MatrizEsparsa&) throw();
 	
 private:
@@ -20,5 +20,9 @@ private:
 	InfoArvoreEsparsa*valorPadrao;
 	int maiorLinha, maiorColuna, menorLinha, menorColuna;
 	int numElementos;
+	void calcularMenorLinha() throw(char*);
+	void calcularMaiorLinha() throw(char*);
+	int calcularMaiorColuna(NoArvoreEsparsa*) throw(char*);
+	int calcularMenorColuna(NoArvoreEsparsa*) throw(char*);
 };
 #endif

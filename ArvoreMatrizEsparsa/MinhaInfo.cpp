@@ -25,7 +25,7 @@ ostream& MinhaInfo::print(ostream& os)const throw() {
 	if (this->info != nullptr)
 		return os << "{ chave = [ " << this->chave << " ] " << '\n' << " info = [ " << this->info << " ] } ";
 	else
-		return os << " chave = { " << this->chave << " } " << '\n';
+		return os << " { " << this->chave << " } " << '\n';
 }
 int MinhaInfo::getChave()const throw() {
 	return this->chave;

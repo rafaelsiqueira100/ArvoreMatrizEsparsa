@@ -46,16 +46,20 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 		this->maiorColuna = coluna;
 	}
 	else {
-		if (linha < this->menorLinha)
+		if (linha < this->menorLinha) {
 			this->menorLinha = linha;
-		if (linha > this->maiorLinha)
+		}
+		if (linha > this->maiorLinha) {
 			this->maiorLinha = linha;
-		if (coluna < this->menorColuna)
+		}
+		if (coluna < this->menorColuna) {
 			this->menorColuna = coluna;
-		if (coluna > this->maiorColuna)
+		}
+		if (coluna > this->maiorColuna) {
 			this->maiorColuna = coluna;
+		}
 	}
-	vazia = 0;
+	//vazia = 0;
 
 	MinhaInfo* li = new MinhaInfo(linha);//chave=linha
 		if (this->arvoreLinhas.haInfo(li)) {
@@ -72,11 +76,24 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 				//alterar
 				if (*valor == *valorPadrao) {
 				//remover
+
 					(*arvoreColunas).remover(col);
+					col = nullptr;
 					this->numElementos--;
-					
+					if ((*arvoreColunas).isVazia()) {
+						arvoreColunas = nullptr;
+						this->arvoreLinhas.remover(infoLinha);
+						infoLinha = nullptr;
+					}
 					if (this->numElementos == 0)
 						this->vazia = 1;
+					else {
+						calcularMaiorLinha();
+						calcularMenorLinha();
+						this->maiorColuna = calcularMaiorColuna(this->arvoreLinhas.getRaiz());
+						this->menorColuna = calcularMenorColuna(this->arvoreLinhas.getRaiz());
+					}
+
 				}
 				else {
 					//altera o valor
@@ -84,7 +101,7 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 					(*infoColuna).setInfo(*valor);
 				}
 			}
-			else {//não existe essa coluna na árvore
+			else {//não existe essa coluna nessa linha da árvore
 				//inserir outro nó
 				if (*valor == *valorPadrao) {
 				//não faz nada
@@ -117,10 +134,107 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 			
 			}
 		}
+		if (this->numElementos > 0)
+			this->vazia = 0;
 	}
 
+void MatrizEsparsa::calcularMenorLinha() throw(char *)
+{
+	if (this->vazia)
+		throw("Tentativa de calcular menor linha de uma matriz vazia");
+	NoArvoreEsparsa* noAtual = this->arvoreLinhas.getRaiz();
+	NoArvoreEsparsa* noAnterior = nullptr;
+	while (noAtual != nullptr) {
+		noAnterior = noAtual;
+		noAtual = noAtual->getPtrNoFilho(0);
+	}
+	this->menorLinha =
+	((MinhaInfo*)(noAnterior->getInfo()))->getChave();
+}
 
+void MatrizEsparsa::calcularMaiorLinha() throw(char *)
+{
+	if (this->vazia)
+		throw("Tentativa de calcular maior linha de uma matriz vazia");
+	NoArvoreEsparsa* noAtual = this->arvoreLinhas.getRaiz();
+	NoArvoreEsparsa* noAnterior = nullptr;
+	while (noAtual != nullptr) {
+		noAnterior = noAtual;
+		noAtual = noAtual->getPtrNoFilho(1);
+	}
+	this->maiorLinha =
+	((MinhaInfo*)(noAnterior->getInfo()))->getChave();
+}
 
+int MatrizEsparsa::calcularMaiorColuna(NoArvoreEsparsa* noAtual/*, NoArvoreEsparsa* noAnterior*/) throw(char*)
+{
+	NoArvoreEsparsa* esq, *dir;
+	esq = noAtual->getPtrNoFilho(0);
+	dir = noAtual->getPtrNoFilho(1);
+	if (esq == nullptr) {
+		if (dir == nullptr) {
+			NoArvoreEsparsa* noColAtual = ((ArvoreEsparsa*)(((MinhaInfo*)(noAtual->getInfo()))->getInfo()))->getRaiz();
+			NoArvoreEsparsa* noColAnterior = nullptr;
+			while (noColAtual != nullptr) {
+				noColAnterior = noColAtual;
+				noColAtual = noColAtual->getPtrNoFilho(1);
+			}
+			return	((MinhaInfo*)(noColAnterior->getInfo()))->getChave();
+
+		}
+		else {
+			return this->calcularMaiorColuna(dir);
+		}
+	}
+	else {
+		if (dir == nullptr) {
+			return this->calcularMaiorColuna(esq);
+		}
+		else {
+			int maiorColunaEsq = this->calcularMaiorColuna(esq);
+			int maiorColunaDir = this->calcularMaiorColuna(dir);
+			if (maiorColunaEsq < maiorColunaDir)
+				return maiorColunaEsq;
+			else
+				return maiorColunaDir;
+		}
+	}
+}
+
+int MatrizEsparsa::calcularMenorColuna(NoArvoreEsparsa* noAtual) throw(char*)
+{
+	NoArvoreEsparsa* esq, *dir;
+	esq = noAtual->getPtrNoFilho(0);
+	dir = noAtual->getPtrNoFilho(1);
+	if (esq == nullptr) {
+		if (dir == nullptr) {
+			NoArvoreEsparsa* noColAtual = ((ArvoreEsparsa*)(((MinhaInfo*)(noAtual->getInfo()))->getInfo()))->getRaiz();
+			NoArvoreEsparsa* noColAnterior = nullptr;
+			while (noColAtual != nullptr) {
+				noColAnterior = noColAtual;
+				noColAtual = noColAtual->getPtrNoFilho(0);
+			}
+			return	((MinhaInfo*)(noColAnterior->getInfo()))->getChave();
+
+		}
+		else {
+			return this->calcularMenorColuna(dir);
+		}
+	}
+	else {
+		if (dir == nullptr) {
+			return this->calcularMenorColuna(esq);
+		}
+		else {
+			int menorColunaEsq = this->calcularMenorColuna(esq);
+			int menorColunaDir = this->calcularMenorColuna(dir);
+			if (menorColunaEsq < menorColunaDir)
+				return menorColunaEsq;
+			else
+				return menorColunaDir;
+		}
+	}
+}
 ostream& operator<<(ostream& os, const MatrizEsparsa& matriz) throw()
 {
 	os << "{ " << '\n' <<
