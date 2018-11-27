@@ -1,4 +1,4 @@
-﻿  MatrizEsparsa.cpp
+﻿  ArvoreMatrizEsparsa.cpp
 c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\noarvoreesparsa.h(11): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
 c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\noarvoreesparsa.h(13): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
 c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\noarvoreesparsa.h(15): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
@@ -12,9 +12,5 @@ c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.h(
 c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.h(24): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
 c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.h(25): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
 c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.h(26): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
-c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.cpp(41): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
-c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.cpp(165): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
-c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.cpp(179): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
-c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.cpp(193): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
-c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\matrizesparsa.cpp(228): warning C4290: especificação de exceção de C++ ignorada exceto para indicar que a função não é __declspec(nothrow)
+c:\users\u16191\desktop\arvorematrizesparsa\arvorematrizesparsa\arvorematrizesparsa.cpp(68): warning C4102: 'fim': rótulo não referenciado
   ArvoreMatrizEsparsa.vcxproj -> C:\Users\u16191\Desktop\ArvoreMatrizEsparsa\x64\Debug\ArvoreMatrizEsparsa.exe

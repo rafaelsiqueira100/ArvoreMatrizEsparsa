@@ -9,7 +9,6 @@ class MatrizEsparsa
 public:
 	MatrizEsparsa(InfoArvoreEsparsa*);
 	~MatrizEsparsa();
-	
 	InfoArvoreEsparsa* pegar(int, int);
 	void inserir(int, int, InfoArvoreEsparsa*) throw(char*);
 	friend ostream& operator<< (ostream&, const MatrizEsparsa&) throw();

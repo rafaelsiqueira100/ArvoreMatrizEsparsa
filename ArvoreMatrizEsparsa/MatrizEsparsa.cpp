@@ -22,10 +22,10 @@ MatrizEsparsa::~MatrizEsparsa()
 InfoArvoreEsparsa* MatrizEsparsa::pegar(int linha, int coluna) {
 	MinhaInfo li(linha);//chave=linha
 	MinhaInfo col(coluna);//chave=coluna
-	if (this->arvoreLinhas.haInfo(&li)) {
+	if (this->arvoreLinhas.haInfo(li)) {
 		MinhaInfo* infoLinha = (MinhaInfo*)(this->arvoreLinhas.pegar(li));
 		ArvoreEsparsa* arvoreColunas = (ArvoreEsparsa*)((*infoLinha).getInfo());
-		if ((*arvoreColunas).haInfo(&col)) {
+		if ((*arvoreColunas).haInfo(col)) {
 			MinhaInfo* infoColuna = (MinhaInfo*)((*arvoreColunas).pegar(col));
 			return (*infoColuna).getInfo();
 		}
@@ -51,7 +51,7 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 	//vazia = 0;
 
 	MinhaInfo* li = new MinhaInfo(linha);//chave=linha
-		if (this->arvoreLinhas.haInfo(li)) {
+		if (this->arvoreLinhas.haInfo(*li)) {
 			//alterar
 			
 			MinhaInfo* infoLinha = (MinhaInfo*)(this->arvoreLinhas.pegar(*li));
@@ -61,7 +61,7 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 				return;
 			}
 			MinhaInfo* col = new MinhaInfo(coluna);//chave=coluna
-			if ((*arvoreColunas).haInfo(col)) {
+			if ((*arvoreColunas).haInfo(*col)) {
 				//alterar
 				if (*valor == *valorPadrao) {
 				//remover
@@ -277,7 +277,7 @@ ostream& operator<<(ostream& os, const MatrizEsparsa& matriz) throw()
 	else {
 		for (indiceLinhas = matriz.menorLinha; indiceLinhas <= matriz.maiorLinha; indiceLinhas++) {
 			MinhaInfo* infoLinha = new MinhaInfo(indiceLinhas);
-			haLinha = (((matriz).arvoreLinhas)).haInfo(infoLinha);
+			haLinha = (((matriz).arvoreLinhas)).haInfo(*infoLinha);
 			ArvoreEsparsa* arvoreColunas = nullptr;
 			//(ArvoreEsparsa) ((MinhaInfo)(matriz.arvoreLinhas.pegar(*(new MinhaInfo(indiceLinhas))))).getInfo();
 			if (haLinha) {
@@ -290,7 +290,7 @@ ostream& operator<<(ostream& os, const MatrizEsparsa& matriz) throw()
 					os << " [ " << (*((MinhaInfo*)(matriz.valorPadrao))).getChave() << " ] ";
 				}
 				else {
-					haColuna = (*arvoreColunas).haInfo(infoColuna);
+					haColuna = (*arvoreColunas).haInfo(*infoColuna);
 					if (!haColuna) {
 						os << " [ " << (*((MinhaInfo*)(matriz.valorPadrao))).getChave() << " ] ";
 					}

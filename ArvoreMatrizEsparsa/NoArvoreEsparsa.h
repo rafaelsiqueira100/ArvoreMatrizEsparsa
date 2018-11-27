@@ -20,7 +20,7 @@ public:
 	char isCheio() const throw();
 	char isVazio() const throw();
 	char isFolha() const throw();
-	char haInfo(InfoArvoreEsparsa*) const throw();
+	char haInfo(const InfoArvoreEsparsa&) const throw();
 	char getEquilibrio() const throw();
 	char getNiveis() const throw();
 	void balancear() throw();
@@ -29,7 +29,7 @@ public:
 	void setInfo(const InfoArvoreEsparsa&) throw();
 	InfoArvoreEsparsa* getInfo() throw();
 private:
-	InfoArvoreEsparsa * info;
+	InfoArvoreEsparsa* info;
 	NoArvoreEsparsa* esq;
 	NoArvoreEsparsa* dir;
 	InfoArvoreEsparsa* acharInfoPorLugar() throw(char*);
