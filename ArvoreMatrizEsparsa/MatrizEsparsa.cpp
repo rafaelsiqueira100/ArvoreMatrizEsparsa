@@ -39,25 +39,14 @@ InfoArvoreEsparsa* MatrizEsparsa::pegar(int linha, int coluna) {
 	}
 }
 void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) throw(char*){
-	if (vazia) {
+	if (vazia && !(*valor == *valorPadrao)) {
 		this->menorLinha = linha;
 		this->maiorLinha = linha;
 		this->menorColuna = coluna;
 		this->maiorColuna = coluna;
 	}
 	else {
-		if (linha < this->menorLinha) {
-			this->menorLinha = linha;
-		}
-		if (linha > this->maiorLinha) {
-			this->maiorLinha = linha;
-		}
-		if (coluna < this->menorColuna) {
-			this->menorColuna = coluna;
-		}
-		if (coluna > this->maiorColuna) {
-			this->maiorColuna = coluna;
-		}
+	
 	}
 	//vazia = 0;
 
@@ -99,6 +88,18 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 					//altera o valor
 					MinhaInfo* infoColuna = (MinhaInfo*)((*arvoreColunas).pegar(*col));
 					(*infoColuna).setInfo(*valor);
+					if (linha < this->menorLinha) {
+						this->menorLinha = linha;
+					}
+					if (linha > this->maiorLinha) {
+						this->maiorLinha = linha;
+					}
+					if (coluna < this->menorColuna) {
+						this->menorColuna = coluna;
+					}
+					if (coluna > this->maiorColuna) {
+						this->maiorColuna = coluna;
+					}
 				}
 			}
 			else {//não existe essa coluna nessa linha da árvore
@@ -113,6 +114,18 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 					//linha-coluna tem um valor
 					(*arvoreColunas).inserir(col);
 					this->numElementos++;
+					if (linha < this->menorLinha) {
+						this->menorLinha = linha;
+					}
+					if (linha > this->maiorLinha) {
+						this->maiorLinha = linha;
+					}
+					if (coluna < this->menorColuna) {
+						this->menorColuna = coluna;
+					}
+					if (coluna > this->maiorColuna) {
+						this->maiorColuna = coluna;
+					}
 				}
 			}
 		}
@@ -131,7 +144,18 @@ void MatrizEsparsa::inserir(int linha, int coluna, InfoArvoreEsparsa*valor) thro
 				//linha tem uma info
 				this->arvoreLinhas.inserir(novaLi);
 				this->numElementos++;
-			
+				if (linha < this->menorLinha) {
+					this->menorLinha = linha;
+				}
+				if (linha > this->maiorLinha) {
+					this->maiorLinha = linha;
+				}
+				if (coluna < this->menorColuna) {
+					this->menorColuna = coluna;
+				}
+				if (coluna > this->maiorColuna) {
+					this->maiorColuna = coluna;
+				}
 			}
 		}
 		if (this->numElementos > 0)
